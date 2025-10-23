@@ -25,7 +25,21 @@ scene.add(plane);
 // Ferrari
 const ferrari = new Ferrari_Testarossa();
 await ferrari.load(); // wait until it's fully loaded
-scene.add(ferrari.model);
+const ferrariModel = ferrari.model;
+scene.add(ferrariModel);
+
+// Arrow key controls
+const keysPressed = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+window.addEventListener('keydown', (e) => {
+    if (keysPressed.hasOwnProperty(e.code)) {
+        keysPressed[e.code] = true;
+    }
+});
+window.addEventListener('keyup', (e) => {
+    if (keysPressed.hasOwnProperty(e.code)) {
+        keysPressed[e.code] = false;
+    }
+});
 
 // Lights
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -58,8 +72,11 @@ window.addEventListener('scroll', () => {
 function animate() {
     requestAnimationFrame(animate);
 
-    // Update controls
+    // Update orbit controls
     controls.update()
+
+    //update Ferrari controls
+    ferrari.updateCar(keysPressed);
 
     renderer.render(scene, camera);
 }
